@@ -4,6 +4,7 @@ class Code
 
     def initialize
         @code_array = []
+        @winner = false
     end
 
     def generate_code
@@ -12,15 +13,19 @@ class Code
         end
     end
 
-    def search_code(pos, number)
+    def search_for_code(balls)
         results = {"found" => 0, "number" => 0}
-        @code_array.each do |ball|
-            if ball.pos == pos && ball.number == number
-                results["found"] += 1
-            elsif ball.number == number
-                results["number"] += 1
+        balls.each do |ball|
+
+            @code_array.each do |code|
+                if ball.is_equal(code.pos, code.number)
+                    results["found"] += 1
+                elsif ball.is_number_equal(code.number)
+                    results["number"] += 1
+                end
             end
         end
+
         return results
     end
 
@@ -36,13 +41,25 @@ class Ball
         @number = number
     end
 
+    def is_equal(pos, number)
+        @pos == pos && @number == number ? true : false
+        
+    end
+
+    def is_number_equal(number)
+        @number == number ? true : false
+    end
+
 end
 
 
 x = Code.new
 x.generate_code
-x.code_array[0].number = 2
-puts x.search_code(2, 2)
+x.code_array[0].number = 1
+x.code_array[1].number = 1
+x.code_array[2].number = 1
+x.code_array[3].number = 1
+puts x.search_for_code([Ball.new(1, 1)])
 
 
 
